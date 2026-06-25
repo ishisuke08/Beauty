@@ -1,0 +1,18 @@
+<div class="result-container">
+    <h2>あなたにぴったりの美容液は...</h2>
+    
+    <!-- 選ばれた悩みの数だけループして表示 -->
+    {% for product in products %}
+    <div class="product-card" style="margin-bottom: 30px; border-bottom: 1px dashed #ccc; padding-bottom: 20px;">
+        <div class="product-name" style="font-size: 1.6rem; color: #4a7c59; font-weight: bold;">
+            {{ product.name }}
+        </div>
+        <p class="product-desc" style="color: #555; line-height: 1.6;">
+            {{ product.desc }}
+        </p>
+    </div>
+    {% endfor %}
+
+    <a href="/anua" class="back-link">もう一度診断する</a><br>
+    <a href="/" class="back-link">topへ</a>
+</div>
