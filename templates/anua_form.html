@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anua 美容液診断</title>
+    <!-- CSSファイルの読み込み -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='anua.css') }}">
+</head>
+<body>
+
+    <h1>今の肌の悩みは？</h1>
+    <p>あてはまるものを最大2つ選んでください</p>
+
+    <form id="diag-form" action="/anua/result" method="POST">
+        <input type="hidden" id="selected-trouble" name="skin_trouble">
+
+        <div class="button-grid">
+            <!-- 各ボタンのonclickを新ロジックの「toggleSelection」に変更しました -->
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'rough')">肌荒れやトラブル肌を<br>鎮静したい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'pore')">肌がごわついて<br>くすんでいる</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'acne')">皮脂分泌が多くて<br>ニキビができやすい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'spot')">ニキビ跡やシミなどの<br>色素沈着がある</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'dull')">毛穴を目立ちづらくし<br>トーンアップしたい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'dry')">水分を与え<br>ツヤ出ししたい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'aging')">ハリ・キメをよくして<br>エイジングケアしたい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'oil')">乾燥が気になり<br>うるおいを与えたい</button>
+            <button type="button" class="trouble-btn" onclick="toggleSelection(this, 'texture')">ごわつきをなくし<br>バリア機能を高めたい</button>
+            </button>
+        </div>
+
+        <!-- 決定ボタン（初期状態は押せない disabled） -->
+        <button type="submit" id="submit-btn" class="submit-btn" disabled>決定して診断する</button>
+        <a href="/" class="cancel-btn" style="margin-left: 180px; margin-top: 15px;">トップに戻る</a>
+    </form>
+
+    <script>
+    // 選択された悩みを管理する配列
+    let selectedTroubles = [];
+
+    function toggleSelection(btnElement, val) {
+        const index = selectedTroubles.indexOf(val);
+
+        if (index > -1) {
+            // すでに選択されていたら：配列から削除し、activeクラスを外す
+            selectedTroubles.splice(index, 1);
+            btnElement.classList.remove('active');
+        } else {
+            // 新しく選択されたとき：2つ未満なら追加し、activeクラスを付与
+            if (selectedTroubles.length < 2) {
+                selectedTroubles.push(val);
+                btnElement.classList.add('active');
+            } else {
+                alert("悩みは2つまで選択できます。");
+            }
+        }
+
+        // 1つ以上選択されていたら決定ボタンを押せるようにする
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = (selectedTroubles.length === 0);
+
+        // 隠し入力にカンマ区切りで値をセット（例: "rough,pore"）
+        document.getElementById('selected-trouble').value = selectedTroubles.join(',');
+    }
+    </script>
+</body>
+</html>
